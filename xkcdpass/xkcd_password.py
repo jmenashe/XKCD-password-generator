@@ -377,7 +377,7 @@ def initialize_interactive_run(options):
         options.numwords = len(options.acrostic)
 
 
-def emit_passwords(wordlist, options):
+def emit_passwords_default(wordlist, options):
     """ Generate the specified number of passwords and output them. """
     count = options.count
     while count > 0:
@@ -478,11 +478,14 @@ class XkcdPassArgumentParser(argparse.ArgumentParser):
                 "Only use this if you know what you are doing."))
 
 
-def main(argv=None):
+def main(argv=None, emitter=None):
     """ Mainline code for this program. """
 
     if argv is None:
         argv = sys.argv
+
+    if emitter is None:
+        emitter = emit_passwords_default
 
     exit_status = 0
 
@@ -505,7 +508,7 @@ def main(argv=None):
         if options.verbose:
             verbose_reports(my_wordlist, options)
 
-        emit_passwords(my_wordlist, options)
+        emitter(my_wordlist, options)
 
     except SystemExit as exc:
         exit_status = exc.code
